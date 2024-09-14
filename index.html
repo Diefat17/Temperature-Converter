@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter</title>
+
+    <style>
+        * {
+            color-scheme: dark;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 24px;
+            border-radius: 10px;
+        }
+        
+        form{
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        [type = text]{
+            text-align: center;
+            padding: 10px;
+            width: 100px;
+            border: 1px solid;
+        }
+
+        select{
+            width: 200px;
+            text-align: center;
+        }
+
+        option{
+            padding: 10px;
+            text-align: start;
+        }
+
+        button{
+            padding: 10px;
+        }
+
+        div{
+            margin-block: 20px;
+            margin-inline: 10px;
+            color: rgb(28, 220, 28);
+        }
+    </style>
+</head>
+<body>
+    <h1>Temperature Converter</h1>
+    <form action="" id="form">
+        <input type="text" placeholder="0.00" id="temp-input" required>
+        <select id="from-unit" required>
+            <option label="From unit" hidden></option>
+            <option value="Farenheit" label="Farenheit"></option>
+            <option value="Celsius" label="Celcius"></option>
+            <option value="Kelvin" label="Kelvin"></option>
+        </select>
+        <select id="to-unit" required>
+            <option label="To unit" hidden></option>
+            <option value="Farenheit" label="Farenheit"></option>
+            <option value="Celsius" label="Celcius"></option>
+            <option value="Kelvin" label="Kelvin"></option>
+        </select>
+
+        <button type="submit" id="boton" disabled>Convert</button>
+    </form>
+
+    <div id="result" hidden>
+        <span id="input-temp">34</span>
+        <span id="unit-from">Celcius</span>
+        <span>is</span>
+        <span id="output-temp">93.2</span>
+        <span id="unit-to">Farenheit</span>
+    </div>
+</body>
+
+<script type="module">
+    const $ = (temp) => document.getElementById(temp)
+    
+    const $form = $('form')
+
+    //Input
+    const $tempInput = $('temp-input')
+    const $fromUnit = $('from-unit')
+    const $tounit = $('to-unit')
+    const $boton = $('boton')
+
+    //Output
+    const $result = $('result')
+    const $inputTemp = $('input-temp')
+    const $unitFrom = $('unit-from')
+    const $outputTemp = $('output-temp')
+    const $unitTo = $('unit-to')
+
+    $form.onchange = (event) => {
+        for(let i = 0; i < $form.children.length - 1; i++){
+            if($form.children[i].value == ''){
+                return
+            }
+        }
+        $boton.removeAttribute('disabled')   
+    }
+
+    $boton.addEventListener('click', Convertir)
+
+    function Convertir (event){
+        event.preventDefault()
+        
+        $unitFrom.innerHTML = $fromUnit.value
+        $unitTo.innerHTML = $tounit.value
+        $inputTemp.innerHTML = $tempInput.value
+
+        if($tounit.value == 'Celsius'){
+            $outputTemp.innerHTML = toCelsius($tempInput.value)
+        }
+
+        else if($tounit.value == 'Farenheit'){
+            $outputTemp.innerHTML = toFarenheit($tempInput.value)
+        }
+
+        else if($tounit.value == 'Kelvin'){
+            $outputTemp.innerHTML = toKelvin($tempInput.value)
+        }
+        
+        $result.removeAttribute('hidden')
+
+
+
+    }
+
+    function toCelsius(grados, apart){
+
+        if($fromUnit.value == 'Farenheit' || apart == 'Farenheit'){
+            return Math.round(((grados - 32) / 1.8) * 100) / 100
+        }
+
+        else if ($fromUnit.value == 'Kelvin' || apart == 'Kelvin'){
+            return (grados * 1) - 273.15
+        }
+
+        else return grados
+    }
+
+    function toFarenheit(grados, apart){
+        if($fromUnit.value == 'Celsius' || apart == 'Celsius'){
+            return Math.round(((grados * 1.8) + 32) * 100) / 100
+            
+        }
+
+        else if ($fromUnit.value == 'Kelvin'){
+            return toFarenheit(toCelsius(grados, 'Kelvin'), 'Celsius')
+        }
+
+        else return grados
+    }
+
+    function toKelvin(grados, apart){
+        if($fromUnit.value == 'Celsius' || apart == 'Celsius'){
+            return Math.round(((grados * 1) + 273.15) * 100) / 100
+        }
+
+        else if ($fromUnit.value == 'Farenheit'){
+            return toFarenheit(toCelsius(grados, 'Celisus'), 'Kelvin')
+        }
+
+        else return grados
+    }
+
+</script>
+</html>
