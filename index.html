@@ -68,11 +68,6 @@
     </form>
 
     <div id="result" hidden>
-        <span id="input-temp">34</span>
-        <span id="unit-from">Celcius</span>
-        <span>is</span>
-        <span id="output-temp">93.2</span>
-        <span id="unit-to">Farenheit</span>
     </div>
 </body>
 
@@ -89,10 +84,6 @@
 
     //Output
     const $result = $('result')
-    const $inputTemp = $('input-temp')
-    const $unitFrom = $('unit-from')
-    const $outputTemp = $('output-temp')
-    const $unitTo = $('unit-to')
 
     $form.onchange = (event) => {
         for(let i = 0; i < $form.children.length - 1; i++){
@@ -107,27 +98,22 @@
 
     function Convertir (event){
         event.preventDefault()
-        
-        $unitFrom.innerHTML = $fromUnit.value
-        $unitTo.innerHTML = $tounit.value
-        $inputTemp.innerHTML = $tempInput.value
+        let res = 0
 
         if($tounit.value == 'Celsius'){
-            $outputTemp.innerHTML = toCelsius($tempInput.value)
+            res = toCelsius($tempInput.value)
         }
 
         else if($tounit.value == 'Farenheit'){
-            $outputTemp.innerHTML = toFarenheit($tempInput.value)
+            res = toFarenheit($tempInput.value)
         }
 
         else if($tounit.value == 'Kelvin'){
-            $outputTemp.innerHTML = toKelvin($tempInput.value)
+            res = toKelvin($tempInput.value)
         }
-        
+
+        $result.innerHTML = `${$tempInput.value} ${$fromUnit.value} is ${res} ${$tounit.value}`       
         $result.removeAttribute('hidden')
-
-
-
     }
 
     function toCelsius(grados, apart){
